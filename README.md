@@ -26,9 +26,6 @@ Adjust the subnet mask dynamically using the CIDR slider. The tool updates all c
 ### 📊 Binary Visualization
 Each result includes a full 32-bit binary representation with clear octet separators, making it easy to understand the underlying binary logic of subnetting.
 
-### 📈 Excel Export
-Export all calculated data to a structured Excel file with a single click — perfect for documentation, reporting, or sharing with your team.
-
 ### 📜 Calculation History
 All calculations are automatically saved locally. You can revisit previous results, manage your history, and never lose track of your work.
 
@@ -67,8 +64,6 @@ open index.html   # or double-click the file
   - Drag the slider to change the subnet mask and see results update instantly.
 - **Save to History**
   - Click "Save to History" to store your calculation for later reference.
-- **Export to Excel**
-  - Click "Export Excel" to download a fully formatted spreadsheet with all data.
 - **Enable Tutorial Mode**
   - Click "Tutorial Mode" to get step-by-step explanations of each result.
 
