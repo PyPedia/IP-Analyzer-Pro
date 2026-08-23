@@ -72,3 +72,11 @@ open index.html   # or double-click the file
 - **Enable Tutorial Mode**
   - Click "Tutorial Mode" to get step-by-step explanations of each result.
 
+## 🎓 Who Is This Tool For?
+- **Network Engineers** – Quickly validate subnet designs and document configurations.
+- **Security Analysts** – Analyze network boundaries for firewall and ACL rule creation.
+- **IT Students** – Learn subnetting with real-time feedback and visual explanations.
+- **System Administrators** – Plan IP assignments and troubleshoot address conflicts.
+- **DevOps Professionals** – Generate accurate subnet data for infrastructure-as-code.
+
+**Built with ☕ by CafeScript Team**
