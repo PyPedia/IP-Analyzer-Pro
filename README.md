@@ -44,11 +44,11 @@ Focus entirely on your calculations with a distraction-free fullscreen experienc
 ## 🧠 What You Can Learn
 This tool is not just a calculator — it's an educational companion for anyone studying IP networking. Each feature is designed to reinforce understanding:
 
-# 💻 Getting Started
+## 💻 Getting Started
 ## Option 1: Use it Online
 Simply open the **index.html** file in any modern web browser. No server, no installation, no dependencies.
 
-## Option 2: Run Locally
+### Option 2: Run Locally
 Clone the repository and open the file:
 
 ```bash
