@@ -51,8 +51,8 @@ Simply open the **index.html** file in any modern web browser. No server, no ins
 ## Option 2: Run Locally
 Clone the repository and open the file:
 
-__
+```bash
 git clone https://github.com/nerd-cafe/ip-analyzer-pro.git
 cd ip-analyzer-pro
 open index.html   # or double-click the file
-__
+```
