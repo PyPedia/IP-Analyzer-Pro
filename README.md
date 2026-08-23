@@ -58,9 +58,9 @@ open index.html   # or double-click the file
 ```
 ## How to Use
 - **Enter an IP Address**: Type an IPv4 address in one of these formats:
--- 192.168.1.0/24 (CIDR notation)
--- 192.168.1.0 255.255.255.0 (IP + Mask)
--- 192.168.1.1 - 192.168.1.254 (IP Range)
+  - 192.168.1.0/24 (CIDR notation)
+  - 192.168.1.0 255.255.255.0 (IP + Mask)
+  - 192.168.1.1 - 192.168.1.254 (IP Range)
 - **Click "Analyze" or press Enter**:
 -- The tool will process your input and display all calculated parameters.
 
