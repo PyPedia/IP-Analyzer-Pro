@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CafeScript : IP Analyzer Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #1a1f2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            transition: background 0.3s ease;
+        }
+
+        body.light-mode {
+            background: #e8ecf1;
+        }
+
+        .app {
+            max-width: 920px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .app {
+            box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+        }
+
+        .app-header {
+            padding: 20px 28px;
+            background: #0b1120;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 2px solid #2d3b52;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .app-header {
+            background: #1e293b;
+            border-bottom: 2px solid #475569;
+        }
+
+        .app-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .app-header .brand span {
+            color: #94a3b8;
+            font-weight: 400;
+            font-size: 15px;
+        }
+
+        .app-header .brand .cafe {
+            background: #2d3b52;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+            color: #e2e8f0;
+        }
+
+        .app-header .badge {
+            background: #1e2a3a;
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-header .badge strong {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .app-header .badge .theme-toggle {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .app-header .badge .theme-toggle:hover {
+            background: #2d3b52;
+            color: #e2e8f0;
+        }
+
+        body.light-mode .app-header .badge .theme-toggle:hover {
+            background: #475569;
+        }
+
+        .app-body {
+            padding: 28px;
+            transition: background 0.3s ease;
+        }
+
+        body.light-mode .app-body {
+            background: #f8fafc;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-row input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 500;
+            background: #f8fafc;
+            transition: all 0.2s;
+            color: #0f172a;
+            font-family: 'Inter', monospace;
+        }
+
+        body.light-mode .input-row input {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        .input-row input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+        }
+
+        .input-row input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-row input.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .input-row .btn-primary {
+            padding: 14px 32px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .input-row .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.4);
+        }
+
+        .input-row .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .input-row .btn-secondary {
+            padding: 14px 24px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        body.light-mode .input-row .btn-secondary {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .input-row .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border-radius: 40px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        body.light-mode .slider-container {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        .slider-container label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            min-width: 80px;
+            accent-color: #2563eb;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .slider-container .slider-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2563eb;
+            min-width: 30px;
+            text-align: center;
+            font-family: 'Inter', monospace;
+        }
+
+        .examples {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .examples button {
+            padding: 6px 14px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        body.light-mode .examples button {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        .examples button:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .result-box {
+            margin-top: 28px;
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .result-item {
+            padding: 16px 20px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        body.light-mode .result-item {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+
+        .result-item .label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .result-item .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            font-family: 'Inter', monospace;
+            letter-spacing: -0.01em;
+            word-break: break-all;
+        }
+
+        .result-item .value .copy-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+            margin-left: 8px;
+            transition: color 0.15s;
+            vertical-align: middle;
+        }
+
+        .result-item .value .copy-btn:hover {
+            color: #2563eb;
+        }
+
+        .result-item .binary-row {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: 'Inter', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            background: #ffffff;
+            border: 2px solid #d1d5db;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .result-item .binary-row {
+            background: #f8fafc;
+            border-color: #d1d5db;
+        }
+
+        .result-item .binary-row .bin-label {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: #e2e8f0;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            display: inline-block;
+        }
+
+        body.light-mode .result-item .binary-row .bin-label {
+            background: #d1d5db;
+        }
+
+        .result-item .binary-row .bin-value {
+            font-family: 'Inter', monospace;
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            display: block;
+            padding: 4px 0;
+            width: 100%;
+        }
+
+        .result-item .binary-row .bin-value .bit-1 {
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .result-item .binary-row .bin-value .bit-0 {
+            color: #000000;
+            font-weight: 500;
+        }
+        .result-item .binary-row .bin-value .dot {
+            color: #000000;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .result-item.network { background: #eff6ff; border-color: #bfdbfe; }
+        .result-item.broadcast { background: #fef2f2; border-color: #fecaca; }
+        .result-item.first { background: #ecfdf5; border-color: #a7f3d0; }
+        .result-item.last { background: #fffbeb; border-color: #fde68a; }
+
+        body.light-mode .result-item.network { background: #dbeafe; border-color: #93c5fd; }
+        body.light-mode .result-item.broadcast { background: #fecaca; border-color: #f87171; }
+        body.light-mode .result-item.first { background: #a7f3d0; border-color: #34d399; }
+        body.light-mode .result-item.last { background: #fcd34d; border-color: #fbbf24; }
+
+        .result-item.network .binary-row { background: #dbeafe; border-color: #93c5fd; }
+        .result-item.broadcast .binary-row { background: #fee2e2; border-color: #fca5a5; }
+        .result-item.first .binary-row { background: #d1fae5; border-color: #6ee7b7; }
+        .result-item.last .binary-row { background: #fef3c7; border-color: #fcd34d; }
+
+        body.light-mode .result-item.network .binary-row { background: #bfdbfe; border-color: #60a5fa; }
+        body.light-mode .result-item.broadcast .binary-row { background: #fecaca; border-color: #f87171; }
+        body.light-mode .result-item.first .binary-row { background: #a7f3d0; border-color: #34d399; }
+        body.light-mode .result-item.last .binary-row { background: #fcd34d; border-color: #fbbf24; }
+
+        .result-item.network .binary-row .bin-label { background: #bfdbfe; color: #1e3a5f; }
+        .result-item.broadcast .binary-row .bin-label { background: #fecaca; color: #7f1d1d; }
+        .result-item.first .binary-row .bin-label { background: #a7f3d0; color: #064e3b; }
+        .result-item.last .binary-row .bin-label { background: #fde68a; color: #78350f; }
+
+        body.light-mode .result-item.network .binary-row .bin-label { background: #93c5fd; color: #1e3a5f; }
+        body.light-mode .result-item.broadcast .binary-row .bin-label { background: #f87171; color: #7f1d1d; }
+        body.light-mode .result-item.first .binary-row .bin-label { background: #34d399; color: #064e3b; }
+        body.light-mode .result-item.last .binary-row .bin-label { background: #fbbf24; color: #78350f; }
+
+        .result-item.network .binary-row .bin-value .bit-1 { color: #1d4ed8; }
+        .result-item.broadcast .binary-row .bin-value .bit-1 { color: #dc2626; }
+        .result-item.first .binary-row .bin-value .bit-1 { color: #059669; }
+        .result-item.last .binary-row .bin-value .bit-1 { color: #d97706; }
+
+        .result-item.network .binary-row .bin-value .bit-0 { color: #000000; }
+        .result-item.broadcast .binary-row .bin-value .bit-0 { color: #000000; }
+        .result-item.first .binary-row .bin-value .bit-0 { color: #000000; }
+        .result-item.last .binary-row .bin-value .bit-0 { color: #000000; }
+
+        .result-item.network .binary-row .bin-value .dot { color: #000000; font-weight: 900; font-size: 18px; }
+        .result-item.broadcast .binary-row .bin-value .dot { color: #000000; font-weight: 900; font-size: 18px; }
+        .result-item.first .binary-row .bin-value .dot { color: #000000; font-weight: 900; font-size: 18px; }
+        .result-item.last .binary-row .bin-value .dot { color: #000000; font-weight: 900; font-size: 18px; }
+
+        .result-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .result-meta .meta-item {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #eef2f6;
+        }
+
+        body.light-mode .result-meta .meta-item {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+
+        .result-meta .meta-item .label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #94a3b8;
+        }
+
+        .result-meta .meta-item .value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2px;
+            font-family: 'Inter', monospace;
+        }
+
+        .result-meta .meta-item .value.public { color: #059669; }
+        .result-meta .meta-item .value.private { color: #dc2626; }
+
+        .fullscreen-btn {
+            padding: 8px 18px;
+            background: #6f42c1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fullscreen-btn:hover {
+            background: #5a32a0;
+            transform: translateY(-1px);
+        }
+
+        .history-section {
+            margin-top: 24px;
+            border-top: 1px solid #eef2f6;
+            padding-top: 20px;
+        }
+
+        body.light-mode .history-section {
+            border-top-color: #e2e8f0;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .history-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .history-header .clear-history {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .history-header .clear-history:hover {
+            color: #ef4444;
+        }
+
+        .history-list {
+            max-height: 120px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .history-list .entry {
+            padding: 8px 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #eef2f6;
+        }
+
+        body.light-mode .history-list .entry {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+
+        .history-list .entry .ip {
+            font-weight: 600;
+            color: #0f172a;
+            font-family: monospace;
+        }
+
+        .history-list .entry .range {
+            color: #475569;
+            font-size: 12px;
+        }
+
+        .history-list .entry .del {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 4px;
+        }
+
+        .history-list .entry .del:hover {
+            color: #ef4444;
+        }
+
+        .history-empty {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 16px 0;
+        }
+
+        .app-footer {
+            padding: 16px 28px;
+            background: #f8fafc;
+            border-top: 1px solid #eef2f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #94a3b8;
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .app-footer {
+            background: #ffffff;
+            border-top-color: #e2e8f0;
+        }
+
+        .app-footer a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .app-footer a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .app-footer .divider {
+            color: #d1d5db;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .app.fullscreen {
+            max-width: 100%;
+            border-radius: 0;
+            min-height: 100vh;
+        }
+
+        .app.fullscreen .app-body {
+            min-height: calc(100vh - 80px);
+        }
+
+        .tutorial-btn {
+            padding: 8px 18px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tutorial-btn:hover {
+            background: #0284c7;
+            transform: translateY(-1px);
+        }
+
+        .tutorial-btn.active {
+            background: #f59e0b;
+        }
+
+        .tutorial-tooltip {
+            display: none;
+            position: fixed;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            max-width: 280px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #1e293b;
+            line-height: 1.6;
+            pointer-events: none;
+        }
+
+        body.light-mode .tutorial-tooltip {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .tutorial-tooltip.show {
+            display: block;
+            animation: fadeUp 0.25s ease;
+        }
+
+        .tutorial-tooltip .tt-title {
+            font-weight: 700;
+            color: #60a5fa;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-item {
+            position: relative;
+        }
+
+        .result-item.tutorial-highlight {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+        }
+
+        .meta-item {
+            position: relative;
+        }
+
+        .meta-item.tutorial-highlight {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .app-body { padding: 20px; }
+            .app-header { padding: 16px 20px; }
+            .app-header .brand { font-size: 17px; }
+            .result-grid { grid-template-columns: 1fr; }
+            .result-meta { grid-template-columns: 1fr 1fr; }
+            .input-row input { min-width: 140px; }
+            .input-row .btn-primary,
+            .input-row .btn-secondary { padding: 12px 18px; font-size: 14px; }
+            .app-footer { flex-direction: column; gap: 8px; }
+            .result-item .binary-row { font-size: 12px; }
+            .result-item .binary-row .bin-value { font-size: 13px; }
+            .slider-container { min-width: 100px; }
+        }
+
+        @media (max-width: 420px) {
+            .result-meta { grid-template-columns: 1fr; }
+            .input-row { flex-direction: column; }
+            .input-row input { width: 100%; }
+            .input-row .btn-primary,
+            .input-row .btn-secondary { width: 100%; justify-content: center; }
+            .slider-container { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app" id="appContainer">
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="brand">
+            ☕ CafeScript
+            <span>| IP Analyzer Pro</span>
+            <span class="cafe">v1.0</span>
+        </div>
+        <div class="badge">
+            ⚡ <strong id="calcCount">0</strong> calculations
+            <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">🌓</button>
+            <button class="theme-toggle" id="fullscreenToggle" title="Toggle Fullscreen">⛶</button>
+        </div>
+    </header>
+
+    <!-- BODY -->
+    <main class="app-body">
+        <!-- INPUT -->
+        <div class="input-section">
+            <div class="input-row">
+                <input type="text" id="ipInput" placeholder="e.g. 192.168.1.0/24 or 10.0.0.0 255.0.0.0" spellcheck="false" autocomplete="off" />
+                <button class="btn-primary" id="calcBtn">Analyze</button>
+                <button class="btn-secondary" id="clearBtn">Clear</button>
+            </div>
+            <div class="input-row">
+                <div class="slider-container">
+                    <label>CIDR</label>
+                    <input type="range" id="cidrSlider" min="0" max="32" value="24" />
+                    <span class="slider-value" id="sliderValue">/24</span>
+                </div>
+            </div>
+            <div class="examples">
+                <button data-example="192.168.1.0/24">192.168.1.0/24</button>
+                <button data-example="10.0.0.0/8">10.0.0.0/8</button>
+                <button data-example="172.16.0.0 255.255.0.0">172.16.0.0/16</button>
+                <button data-example="192.168.1.1 - 192.168.1.254">Range</button>
+            </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result-box" id="resultBox">
+            <div class="result-grid">
+                <div class="result-item network" data-tutorial="Network ID is the base address of the subnet. It identifies the network itself and cannot be assigned to a host.">
+                    <div class="label">🟦 Network ID</div>
+                    <div class="value" id="networkId">—</div>
+                    <div class="binary-row">
+                        <span class="bin-label">BIN</span>
+                        <span class="bin-value" id="networkBinary">—</span>
+                    </div>
+                </div>
+                <div class="result-item broadcast" data-tutorial="Broadcast address is used to send data to all hosts on the network. It cannot be assigned to a single host.">
+                    <div class="label">🟥 Broadcast</div>
+                    <div class="value" id="broadcast">—</div>
+                    <div class="binary-row">
+                        <span class="bin-label">BIN</span>
+                        <span class="bin-value" id="broadcastBinary">—</span>
+                    </div>
+                </div>
+                <div class="result-item first" data-tutorial="First usable IP address in the subnet. Usually assigned to the default gateway or the first host.">
+                    <div class="label">🟩 First IP</div>
+                    <div class="value" id="firstIp">—</div>
+                    <div class="binary-row">
+                        <span class="bin-label">BIN</span>
+                        <span class="bin-value" id="firstBinary">—</span>
+                    </div>
+                </div>
+                <div class="result-item last" data-tutorial="Last usable IP address in the subnet. Often used as the broadcast or assigned to the last host.">
+                    <div class="label">🟧 Last IP</div>
+                    <div class="value" id="lastIp">—</div>
+                    <div class="binary-row">
+                        <span class="bin-label">BIN</span>
+                        <span class="bin-value" id="lastBinary">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-meta" id="resultMeta">
+                <div class="meta-item" data-tutorial="Subnet Mask defines which portion of the IP address belongs to the network and which to the host.">
+                    <div class="label">Subnet Mask</div>
+                    <div class="value" id="subnetMask">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="CIDR notation is a compact way to represent the subnet mask using a slash followed by the number of network bits.">
+                    <div class="label">CIDR</div>
+                    <div class="value" id="cidr">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="Wildcard mask is the inverse of the subnet mask. It's used in routing protocols like OSPF and ACLs.">
+                    <div class="label">Wildcard Mask</div>
+                    <div class="value" id="wildcardMask">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="Total number of usable IP addresses in the subnet. Formula: 2^(32-CIDR) - 2 (network and broadcast are excluded).">
+                    <div class="label">Total Hosts</div>
+                    <div class="value" id="totalHosts">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="IP Class determines the default network size. Class A (1-126), B (128-191), C (192-223).">
+                    <div class="label">IP Class</div>
+                    <div class="value" id="ipClass">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="Public IPs are routable on the internet. Private IPs are reserved for internal networks and not routable on the internet.">
+                    <div class="label">IP Type</div>
+                    <div class="value" id="ipType">—</div>
+                </div>
+                <div class="meta-item" data-tutorial="Classful networks use default subnet masks based on IP class. Classless (CIDR) allows flexible subnet masks.">
+                    <div class="label">Addressing Type</div>
+                    <div class="value" id="addressingType">—</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
+                <button class="btn-secondary" style="padding:8px 16px; font-size:13px;" id="saveHistoryBtn">📜 Save to History</button>
+                <button class="btn-secondary" style="padding:8px 16px; font-size:13px;" id="copyAllBtn">📋 Copy All</button>
+                <button class="tutorial-btn" id="tutorialBtn">📖 Tutorial Mode</button>
+                <button class="fullscreen-btn" id="fullscreenBtn">⛶ Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="history-section">
+            <div class="history-header">
+                <h3>📜 History</h3>
+                <button class="clear-history" id="clearHistoryBtn">Clear all</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">No calculations saved yet.</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <a href="https://www.nerd-cafe.ir" target="_blank">www.nerd-cafe.ir</a>
+        <span class="divider">·</span>
+        <a href="https://www.youtube.com/@nerd-cafe" target="_blank">YouTube: @nerd-cafe</a>
+        <span class="divider">·</span>
+        <span>CafeScript Tools</span>
+    </footer>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // DOM refs
+        const appContainer = document.getElementById('appContainer');
+        const ipInput = document.getElementById('ipInput');
+        const calcBtn = document.getElementById('calcBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const resultBox = document.getElementById('resultBox');
+
+        const networkId = document.getElementById('networkId');
+        const broadcast = document.getElementById('broadcast');
+        const firstIp = document.getElementById('firstIp');
+        const lastIp = document.getElementById('lastIp');
+        const subnetMask = document.getElementById('subnetMask');
+        const cidr = document.getElementById('cidr');
+        const wildcardMask = document.getElementById('wildcardMask');
+        const totalHosts = document.getElementById('totalHosts');
+        const ipClass = document.getElementById('ipClass');
+        const ipType = document.getElementById('ipType');
+        const addressingType = document.getElementById('addressingType');
+
+        const networkBinary = document.getElementById('networkBinary');
+        const broadcastBinary = document.getElementById('broadcastBinary');
+        const firstBinary = document.getElementById('firstBinary');
+        const lastBinary = document.getElementById('lastBinary');
+
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const saveHistoryBtn = document.getElementById('saveHistoryBtn');
+        const copyAllBtn = document.getElementById('copyAllBtn');
+        const calcCount = document.getElementById('calcCount');
+        const themeToggle = document.getElementById('themeToggle');
+        const fullscreenToggle = document.getElementById('fullscreenToggle');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const tutorialBtn = document.getElementById('tutorialBtn');
+
+        const cidrSlider = document.getElementById('cidrSlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        const toastEl = document.getElementById('toast');
+        let toastTimer = null;
+
+        let history = [];
+        let lastResult = null;
+        let calcCounter = 0;
+        let isFullscreen = false;
+        let tutorialMode = false;
+        let tutorialTimer = null;
+        let tutorialItems = [];
+
+        // ----- Input validation - only allow digits, dots, slash, space, and dash -----
+        function validateIPInput(input) {
+            // Only allow: 0-9, ., /, space, -
+            return input.replace(/[^0-9./\s-]/g, '');
+        }
+
+        // ----- Theme -----
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            themeToggle.textContent = isLight ? '🌙' : '🌓';
+            localStorage.setItem('cafeScript_theme', isLight ? 'light' : 'dark');
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('cafeScript_theme');
+            if (saved === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggle.textContent = '🌙';
+            }
+        }
+
+        // ----- Fullscreen -----
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+                appContainer.classList.add('fullscreen');
+                isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+                appContainer.classList.remove('fullscreen');
+                isFullscreen = false;
+            }
+        }
+
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                appContainer.classList.remove('fullscreen');
+                isFullscreen = false;
+            }
+        });
+
+        // ----- Tutorial Mode -----
+        function toggleTutorial() {
+            tutorialMode = !tutorialMode;
+            tutorialBtn.textContent = tutorialMode ? '📖 Tutorial: ON' : '📖 Tutorial Mode';
+            tutorialBtn.classList.toggle('active', tutorialMode);
+
+            if (tutorialMode) {
+                document.querySelectorAll('.tutorial-tooltip').forEach(el => el.remove());
+                document.querySelectorAll('.result-item, .meta-item').forEach(el => el.classList.remove('tutorial-highlight'));
+                showTutorial();
+            } else {
+                document.querySelectorAll('.tutorial-tooltip').forEach(el => el.remove());
+                document.querySelectorAll('.result-item, .meta-item').forEach(el => el.classList.remove('tutorial-highlight'));
+                if (tutorialTimer) {
+                    clearTimeout(tutorialTimer);
+                    tutorialTimer = null;
+                }
+            }
+        }
+
+        function showTutorial() {
+            if (!tutorialMode) return;
+
+            document.querySelectorAll('.tutorial-tooltip').forEach(el => el.remove());
+            document.querySelectorAll('.result-item, .meta-item').forEach(el => el.classList.remove('tutorial-highlight'));
+
+            const items = document.querySelectorAll('.result-item[data-tutorial], .meta-item[data-tutorial]');
+            if (items.length === 0) return;
+
+            tutorialItems = Array.from(items);
+            let index = 0;
+
+            function showNextTooltip() {
+                if (!tutorialMode || index >= tutorialItems.length) {
+                    index = 0;
+                    setTimeout(showNextTooltip, 2000);
+                    return;
+                }
+
+                const el = tutorialItems[index];
+                const text = el.getAttribute('data-tutorial');
+                if (!text) {
+                    index++;
+                    showNextTooltip();
+                    return;
+                }
+
+                document.querySelectorAll('.result-item, .meta-item').forEach(e => e.classList.remove('tutorial-highlight'));
+                document.querySelectorAll('.tutorial-tooltip').forEach(e => e.remove());
+
+                el.classList.add('tutorial-highlight');
+
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tutorial-tooltip show';
+                tooltip.innerHTML = `<div class="tt-title">📖 Step ${index + 1}</div><div>${text}</div>`;
+                document.body.appendChild(tooltip);
+
+                const rect = el.getBoundingClientRect();
+                let top = rect.bottom + 12;
+                let left = rect.left;
+
+                if (top + 150 > window.innerHeight) {
+                    top = rect.top - 150;
+                }
+                if (left + 280 > window.innerWidth) {
+                    left = window.innerWidth - 290;
+                }
+                if (left < 10) left = 10;
+
+                tooltip.style.top = top + 'px';
+                tooltip.style.left = left + 'px';
+                tooltip.style.maxWidth = '280px';
+
+                if (tutorialTimer) clearTimeout(tutorialTimer);
+                tutorialTimer = setTimeout(() => {
+                    if (!tutorialMode) return;
+                    tooltip.remove();
+                    el.classList.remove('tutorial-highlight');
+                    index++;
+                    tutorialTimer = setTimeout(showNextTooltip, 300);
+                }, 4500);
+            }
+
+            tutorialTimer = setTimeout(showNextTooltip, 500);
+        }
+
+        // ----- Helpers -----
+        function showToast(msg) {
+            if (toastTimer) clearTimeout(toastTimer);
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            toastTimer = setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 1800);
+        }
+
+        function copyText(text) {
+            if (!text || text === '—') return;
+            navigator.clipboard?.writeText(text).then(() => {
+                showToast('📋 Copied!');
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                showToast('📋 Copied!');
+            });
+        }
+
+        function ipToNumber(ip) {
+            const parts = ip.split('.').map(Number);
+            return (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3];
+        }
+
+        function numberToIp(num) {
+            return ((num >>> 24) & 0xFF) + '.' +
+                   ((num >>> 16) & 0xFF) + '.' +
+                   ((num >>> 8) & 0xFF) + '.' +
+                   (num & 0xFF);
+        }
+
+        function maskToPrefix(mask) {
+            const num = ipToNumber(mask);
+            let prefix = 0;
+            for (let i = 31; i >= 0; i--) {
+                if ((num >> i) & 1) prefix++;
+                else break;
+            }
+            for (let i = 31 - prefix; i >= 0; i--) {
+                if ((num >> i) & 1) return null;
+            }
+            return prefix;
+        }
+
+        function getBinary(ip) {
+            const num = ipToNumber(ip);
+            let bin = '';
+            for (let i = 31; i >= 0; i--) {
+                const bit = (num >> i) & 1;
+                bin += bit ? '<span class="bit-1">1</span>' : '<span class="bit-0">0</span>';
+                if (i % 8 === 0 && i !== 0) {
+                    bin += '<span class="dot">.</span>';
+                }
+            }
+            if (bin.endsWith('<span class="dot">.</span>')) {
+                bin = bin.slice(0, -22);
+            }
+            return bin;
+        }
+
+        function isValidIP(ip) {
+            const parts = ip.split('.');
+            if (parts.length !== 4) return false;
+            for (let p of parts) {
+                const n = parseInt(p);
+                if (isNaN(n) || n < 0 || n > 255) return false;
+            }
+            return true;
+        }
+
+        function getIPClass(ip) {
+            const first = parseInt(ip.split('.')[0]);
+            if (first >= 1 && first <= 126) return 'A';
+            if (first >= 128 && first <= 191) return 'B';
+            if (first >= 192 && first <= 223) return 'C';
+            if (first >= 224 && first <= 239) return 'D (Multicast)';
+            if (first >= 240 && first <= 255) return 'E (Experimental)';
+            return 'Unknown';
+        }
+
+        function getIPType(ip) {
+            const first = parseInt(ip.split('.')[0]);
+            if (first === 10) return 'Private';
+            if (first === 172) {
+                const second = parseInt(ip.split('.')[1]);
+                if (second >= 16 && second <= 31) return 'Private';
+            }
+            if (first === 192) {
+                const second = parseInt(ip.split('.')[1]);
+                if (second === 168) return 'Private';
+            }
+            if (first === 127) return 'Loopback';
+            if (first >= 224 && first <= 239) return 'Multicast';
+            return 'Public';
+        }
+
+        function getDefaultMask(ipClass) {
+            const cls = ipClass.charAt(0);
+            if (cls === 'A') return 8;
+            if (cls === 'B') return 16;
+            if (cls === 'C') return 24;
+            return null;
+        }
+
+        function getAddressingType(prefix, ipClass) {
+            const defaultMask = getDefaultMask(ipClass);
+            if (defaultMask === null) return 'N/A';
+            if (prefix === defaultMask) return 'Classful';
+            return 'Classless (CIDR)';
+        }
+
+        // ----- Parse input -----
+        function parseInput(input) {
+            input = input.trim();
+            if (!input) return null;
+
+            let m = input.match(/^(\d+\.\d+\.\d+\.\d+)\/(\d+)$/);
+            if (m) {
+                const ip = m[1];
+                const pref = parseInt(m[2]);
+                if (isValidIP(ip) && pref >= 0 && pref <= 32) {
+                    return { ip, prefix: pref };
+                }
+                return null;
+            }
+
+            m = input.match(/^(\d+\.\d+\.\d+\.\d+)\s+(\d+\.\d+\.\d+\.\d+)$/);
+            if (m) {
+                const ip = m[1];
+                const mask = m[2];
+                if (isValidIP(ip) && isValidIP(mask)) {
+                    const pref = maskToPrefix(mask);
+                    if (pref !== null) return { ip, prefix: pref };
+                }
+                return null;
+            }
+
+            m = input.match(/^(\d+\.\d+\.\d+\.\d+)\s*-\s*(\d+\.\d+\.\d+\.\d+)$/);
+            if (m) {
+                const ip1 = m[1];
+                const ip2 = m[2];
+                if (isValidIP(ip1) && isValidIP(ip2)) {
+                    const n1 = ipToNumber(ip1);
+                    const n2 = ipToNumber(ip2);
+                    if (n1 < n2) {
+                        const diff = n2 - n1 + 1;
+                        const pref = 32 - Math.ceil(Math.log2(diff));
+                        if (pref >= 0 && pref <= 32) {
+                            const maskNum = (~0) << (32 - pref);
+                            const network = n1 & maskNum;
+                            return { ip: numberToIp(network >>> 0), prefix: pref };
+                        }
+                    }
+                }
+                return null;
+            }
+
+            if (isValidIP(input)) {
+                return { ip: input, prefix: 24 };
+            }
+
+            return null;
+        }
+
+        // ----- Calculate -----
+        function calculate(ip, prefix) {
+            const ipNum = ipToNumber(ip);
+            const maskNum = prefix === 0 ? 0 : (~0) << (32 - prefix);
+            const network = ipNum & maskNum;
+            const wildcard = (~maskNum) >>> 0;
+            const broadcast = network | wildcard;
+            const first = network + 1;
+            const last = broadcast - 1;
+            const hosts = Math.max(0, (1 << (32 - prefix)) - 2);
+
+            const ipClassVal = getIPClass(ip);
+            const ipTypeVal = getIPType(ip);
+            const addressingTypeVal = getAddressingType(prefix, ipClassVal);
+
+            return {
+                ip,
+                prefix,
+                network: numberToIp(network >>> 0),
+                broadcast: numberToIp(broadcast >>> 0),
+                first: numberToIp(first >>> 0),
+                last: numberToIp(last >>> 0),
+                mask: numberToIp(maskNum >>> 0),
+                wildcard: numberToIp(wildcard >>> 0),
+                hosts,
+                ipClass: ipClassVal,
+                ipType: ipTypeVal,
+                addressingType: addressingTypeVal,
+            };
+        }
+
+        // ----- Render result -----
+        function renderResult(result) {
+            networkId.textContent = result.network;
+            broadcast.textContent = result.broadcast;
+            firstIp.textContent = result.first;
+            lastIp.textContent = result.last;
+            subnetMask.textContent = result.mask;
+            cidr.textContent = '/' + result.prefix;
+            wildcardMask.textContent = result.wildcard;
+            totalHosts.textContent = result.hosts.toLocaleString();
+            ipClass.textContent = result.ipClass;
+            ipType.textContent = result.ipType;
+            ipType.className = 'value ' + (result.ipType === 'Private' ? 'private' : 'public');
+            addressingType.textContent = result.addressingType;
+            addressingType.className = 'value ' + (result.addressingType === 'Classful' ? 'public' : 'private');
+
+            networkBinary.innerHTML = getBinary(result.network);
+            broadcastBinary.innerHTML = getBinary(result.broadcast);
+            firstBinary.innerHTML = getBinary(result.first);
+            lastBinary.innerHTML = getBinary(result.last);
+
+            cidrSlider.value = result.prefix;
+            sliderValue.textContent = '/' + result.prefix;
+
+            resultBox.classList.add('show');
+            lastResult = result;
+            setupCopyButtons();
+
+            if (tutorialMode) {
+                setTimeout(showTutorial, 500);
+            }
+        }
+
+        // ----- Setup copy buttons -----
+        function setupCopyButtons() {
+            document.querySelectorAll('.result-item .value').forEach(el => {
+                const val = el.textContent.trim();
+                if (val && val !== '—') {
+                    if (el.querySelector('.copy-btn')) return;
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-btn';
+                    btn.textContent = '📋';
+                    btn.title = 'Copy';
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const text = el.textContent.replace('📋', '').trim();
+                        if (text) copyText(text);
+                    });
+                    el.appendChild(btn);
+                }
+            });
+        }
+
+        // ----- Main action -----
+        function runCalculation(ipOverride, prefixOverride) {
+            let input = ipOverride || ipInput.value;
+
+            if (!ipOverride) {
+                // Validate and sanitize input - remove invalid characters
+                const sanitized = validateIPInput(input);
+                if (sanitized !== input) {
+                    ipInput.value = sanitized;
+                    input = sanitized;
+                    showToast('⚠️ Invalid characters removed');
+                }
+            }
+
+            if (!input) {
+                showToast('Please enter an IP address');
+                ipInput.classList.add('error');
+                setTimeout(() => ipInput.classList.remove('error'), 2000);
+                return;
+            }
+
+            let parsed;
+            if (prefixOverride !== undefined && ipOverride) {
+                parsed = { ip: ipOverride, prefix: prefixOverride };
+            } else {
+                parsed = parseInput(input);
+            }
+
+            if (!parsed) {
+                showToast('⚠️ Invalid IP format. Use: IP/CIDR, IP MASK, or IP-IP');
+                ipInput.classList.add('error');
+                setTimeout(() => ipInput.classList.remove('error'), 2000);
+                return;
+            }
+
+            ipInput.classList.remove('error');
+            const result = calculate(parsed.ip, parsed.prefix);
+            renderResult(result);
+
+            calcCounter++;
+            calcCount.textContent = calcCounter;
+
+            showToast('✅ Analysis complete');
+        }
+
+        // ----- History -----
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="history-empty">No calculations saved yet.</div>';
+                return;
+            }
+            let html = '';
+            for (let i = history.length - 1; i >= 0; i--) {
+                const h = history[i];
+                html += `
+                    <div class="entry">
+                        <span class="ip">${h.network}/${h.prefix}</span>
+                        <span class="range">${h.first} – ${h.last}</span>
+                        <button class="del" data-idx="${i}">✕</button>
+                    </div>
+                `;
+            }
+            historyList.innerHTML = html;
+
+            historyList.querySelectorAll('.del').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const idx = parseInt(this.dataset.idx);
+                    history.splice(idx, 1);
+                    renderHistory();
+                    saveHistoryToStorage();
+                    showToast('🗑️ Removed from history');
+                });
+            });
+        }
+
+        function saveHistoryToStorage() {
+            try {
+                localStorage.setItem('cafeScript_history', JSON.stringify(history));
+            } catch (_) {}
+        }
+
+        function addToHistory() {
+            if (!lastResult) {
+                showToast('No result to save');
+                return;
+            }
+            history.push({ ...lastResult });
+            renderHistory();
+            saveHistoryToStorage();
+            showToast('📜 Saved to history');
+        }
+
+        function clearHistory() {
+            if (history.length === 0) return;
+            if (confirm('Clear all history?')) {
+                history = [];
+                renderHistory();
+                saveHistoryToStorage();
+                showToast('🗑️ History cleared');
+            }
+        }
+
+        // ----- Copy All -----
+        function copyAll() {
+            if (!lastResult) {
+                showToast('No result to copy');
+                return;
+            }
+            const text = `Network: ${lastResult.network}\nBroadcast: ${lastResult.broadcast}\nFirst IP: ${lastResult.first}\nLast IP: ${lastResult.last}\nMask: ${lastResult.mask}\nWildcard: ${lastResult.wildcard}\nCIDR: /${lastResult.prefix}\nHosts: ${lastResult.hosts}\nClass: ${lastResult.ipClass}\nType: ${lastResult.ipType}\nAddressing: ${lastResult.addressingType}`;
+            copyText(text);
+        }
+
+        // ----- Clear -----
+        function clearAll() {
+            ipInput.value = '';
+            ipInput.classList.remove('error');
+            resultBox.classList.remove('show');
+            lastResult = null;
+            ipInput.focus();
+            showToast('🧹 Cleared');
+            if (tutorialMode) {
+                toggleTutorial();
+            }
+        }
+
+        // ----- Examples -----
+        function setExample(example) {
+            ipInput.value = example;
+            ipInput.classList.remove('error');
+            runCalculation();
+        }
+
+        // ----- Init -----
+        function init() {
+            loadTheme();
+
+            calcBtn.addEventListener('click', function() { runCalculation(); });
+            clearBtn.addEventListener('click', clearAll);
+            saveHistoryBtn.addEventListener('click', addToHistory);
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            copyAllBtn.addEventListener('click', copyAll);
+
+            themeToggle.addEventListener('click', toggleTheme);
+
+            fullscreenToggle.addEventListener('click', toggleFullscreen);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            tutorialBtn.addEventListener('click', toggleTutorial);
+
+            // Slider - auto-apply when changed
+            cidrSlider.addEventListener('input', function() {
+                const val = parseInt(this.value);
+                sliderValue.textContent = '/' + val;
+                const input = ipInput.value.trim();
+                if (input) {
+                    const parsed = parseInput(input);
+                    if (parsed) {
+                        const newIP = parsed.ip + '/' + val;
+                        ipInput.value = newIP;
+                        // Auto-run calculation with new CIDR
+                        runCalculation(parsed.ip, val);
+                    }
+                }
+            });
+
+            // Input validation on keyup
+            ipInput.addEventListener('input', function() {
+                const cursorPos = this.selectionStart;
+                const oldValue = this.value;
+                const newValue = validateIPInput(oldValue);
+                if (newValue !== oldValue) {
+                    this.value = newValue;
+                    const newPos = Math.min(cursorPos - (oldValue.length - newValue.length), newValue.length);
+                    this.setSelectionRange(newPos, newPos);
+                }
+            });
+
+            // Prevent paste with invalid characters
+            ipInput.addEventListener('paste', function(e) {
+                const pasted = (e.clipboardData || window.clipboardData).getData('text');
+                const cleaned = validateIPInput(pasted);
+                if (cleaned !== pasted) {
+                    e.preventDefault();
+                    document.execCommand('insertText', false, cleaned);
+                    showToast('⚠️ Invalid characters removed from paste');
+                }
+            });
+
+            document.querySelectorAll('.examples button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setExample(this.dataset.example);
+                });
+            });
+
+            ipInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    runCalculation();
+                }
+            });
+
+            try {
+                const saved = localStorage.getItem('cafeScript_history');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed)) {
+                        history = parsed;
+                        renderHistory();
+                    }
+                }
+            } catch (_) {}
+
+            const origPush = history.push.bind(history);
+            history.push = function(...items) {
+                const result = origPush(...items);
+                saveHistoryToStorage();
+                return result;
+            };
+
+            const origSplice = history.splice.bind(history);
+            history.splice = function(...args) {
+                const result = origSplice(...args);
+                saveHistoryToStorage();
+                return result;
+            };
+
+            ipInput.focus();
+            console.log('☕ CafeScript : IP Analyzer Pro loaded');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>
+
+</body>
+</html>
