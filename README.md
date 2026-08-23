@@ -45,7 +45,7 @@ Focus entirely on your calculations with a distraction-free fullscreen experienc
 This tool is not just a calculator — it's an educational companion for anyone studying IP networking. Each feature is designed to reinforce understanding:
 
 ## 💻 Getting Started
-## Option 1: Use it Online
+### Option 1: Use it Online
 Simply open the **index.html** file in any modern web browser. No server, no installation, no dependencies.
 
 ### Option 2: Run Locally
@@ -56,3 +56,23 @@ git clone https://github.com/nerd-cafe/ip-analyzer-pro.git
 cd ip-analyzer-pro
 open index.html   # or double-click the file
 ```
+## How to Use
+- **Enter an IP Address**: Type an IPv4 address in one of these formats:
+-- 192.168.1.0/24 (CIDR notation)
+-- 192.168.1.0 255.255.255.0 (IP + Mask)
+-- 192.168.1.1 - 192.168.1.254 (IP Range)
+- **Click "Analyze" or press Enter**:
+-- The tool will process your input and display all calculated parameters.
+
+Adjust CIDR with the Slider
+Drag the slider to change the subnet mask and see results update instantly.
+
+Save to History
+Click "Save to History" to store your calculation for later reference.
+
+Export to Excel
+Click "Export Excel" to download a fully formatted spreadsheet with all data.
+
+Enable Tutorial Mode
+Click "Tutorial Mode" to get step-by-step explanations of each result.
+
